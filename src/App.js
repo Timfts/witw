@@ -1,25 +1,23 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import { BrowserRouter as Router } from "react-router-dom";
+import Layout from "./components/layout/Layout";
+import GlobalStyles from "./styles/base/GlobalStyles";
+import { ThemeProvider } from "styled-components";
+import { dark, light } from "./styles/theme";
+
 
 function App() {
+  const stored = localStorage.getItem("isDarkMode");
+  const [isDarkMode, setIsDarkMode] = useState(
+    stored === "true" ? true : false
+  );
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ThemeProvider theme={isDarkMode ? dark : light}>
+      <Router>
+        <GlobalStyles />
+        <Layout darkmodeToggle={setIsDarkMode} darkmodeState={isDarkMode} />
+      </Router>
+    </ThemeProvider>
   );
 }
 
