@@ -15,7 +15,7 @@ const SearchInput = styled.input.attrs(props => ({
 `;
 
 const Search = ({ callback }) => {
-  return <SearchInput />;
+  return <SearchInput onKeyUp={(e) => callback(e)}/>;
 };
 
 Search.propTypes = {
