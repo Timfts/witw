@@ -5,6 +5,7 @@ import NotFoundPage from "../../pages/404";
 import Home from "../../pages/Home";
 import CountryTemplate from '../../templates/CountryTemplate';
 import Proptypes from 'prop-types';
+import { BrowserRouter as Router } from "react-router-dom";
 
 const Layout = ({darkmodeState, darkmodeToggle}) => {
   return (

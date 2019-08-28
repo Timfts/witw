@@ -15,14 +15,18 @@ const HeaderContainer = styled(Container)`
   padding:24px 0;
 `;
 
-const HeaderTitle = styled.h1`
+const HeaderTitle = styled.a.attrs(props => ({
+  href:"/"
+}))`
+  display:inline-block;
+  font-weight:800;
+  color:${props => props.theme.text};
   font-size:25px;
 `;
 
 const Header = ({ darkmodeState, darkmodeToggle }) => {
   function toggleDarkMode() {
     localStorage.setItem("isDarkMode", !darkmodeState);
-    console.log(darkmodeState);
     darkmodeToggle(!darkmodeState);
   }
   return (

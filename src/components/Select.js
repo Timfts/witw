@@ -14,9 +14,9 @@ const SelectSelector = styled.div`
 
 const SelectOptions = styled.div`
   position: absolute;
-  transition:all .3s ease-in;
-  opacity:${props => props.open ? '1' : '0'};
-  visibility: ${props => props.open ? 'visible' : 'hidden'};
+  transition: all 0.3s ease-in;
+  opacity: ${props => (props.open ? "1" : "0")};
+  visibility: ${props => (props.open ? "visible" : "hidden")};
   ${element}
   top:110%;
   padding: 10px 0;
@@ -26,7 +26,7 @@ const SelectOption = styled.div`
   padding: 4px 20px;
   cursor: pointer;
   transition: all 0.3s ease;
-  text-transform:capitalize;
+  text-transform: capitalize;
 
   &:hover {
     background-color: ${props => props.theme.color.background};
@@ -40,7 +40,9 @@ const Select = ({ options, callback }) => {
   function changeOption(option) {
     setselected(option);
     setopen(false);
+    callback(option);
   }
+
 
   const selectOptions = options.map((option, index) => (
     <SelectOption onClick={() => changeOption(option)} key={index}>
@@ -52,7 +54,7 @@ const Select = ({ options, callback }) => {
     <SelectContainer>
       <SelectSelector onClick={() => setopen(!open)}>{selected}</SelectSelector>
 
-      <SelectOptions open={open} >{selectOptions}</SelectOptions>
+      <SelectOptions open={open}>{selectOptions}</SelectOptions>
     </SelectContainer>
   );
 };

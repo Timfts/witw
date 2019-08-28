@@ -57,6 +57,11 @@ const typography = css`
     font-weight:800;
   }
 
+  a{
+    text-decoration:none;
+    color:${props => props.theme.color.text};
+  }
+
 `;
 
 export default typography;

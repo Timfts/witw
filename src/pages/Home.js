@@ -6,16 +6,27 @@ import Search from "../components/Search";
 import Select from "../components/Select";
 import CountryCard from "../components/CountryCard";
 import { media } from "../styles/abstract/respond";
+import PageNavigation from "../components/PageNavigator";
 
 const FilterSection = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 50px 0;
+  ${media.tabPort`
+    flex-direction:column;
+    justify-content:flex-start;
+    align-items:flex-start;
+  `}
 `;
 
 const SearchContainer = styled.div`
   width: 400px;
+
+  ${media.tabPort`
+    width:100%;
+    margin-bottom:45px;
+  `}
 `;
 
 const SelectContainer = styled.div`
@@ -23,49 +34,52 @@ const SelectContainer = styled.div`
 `;
 
 const CountriesContainer = styled.section`
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
+  display:grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-gap:80px;
+  margin:20px 0;
+  width:100%;
+  min-height:80vh;
+  ${media.desk`
+    grid-gap:40px;
+  `}
+  ${media.tabLand`
+      grid-gap:30px;
+      grid-template-columns:repeat(3, 1fr);
+    `}
+  ${media.tabPort`
+      grid-template-columns:repeat(2, 1fr);
+    `}
+  ${media.phone`
+      grid-template-columns:1fr;
+    `}
 `;
 
 const CardContainer = styled.div`
-  width: calc(25% - 50px);
-  margin-bottom:50px;
-
-  ${media.desk`
-    width:calc(26% - 50px);
-  `}
-
-  ${media.tabLand`
-    width:calc(33% - 50px);
-  `}
-
-  ${media.tabPort`
-    width:calc(50% - 25px);
-  `}
+  min-width: 0;
+  min-height: 0;
 
   ${media.phone`
-      width:100%;
-    `}
+    padding-left:10%;
+    padding-right:10%;
+  `}
 `;
 
 const Home = () => {
   const initialCountries = {
     pages: [],
-    pagesSize: 0
+    pagesSize: 1
   };
   const [Loading, setLoading] = useState(false);
-  const [page, setpage] = useState(1);
-  const regions = ["africa", "americas", "asia", "europe", "oceania"];
-  const itemsPerPage = 10;
+  const regions = ["Africa", "Americas", "Asia", "Europe", "Oceania"];
+  const itemsPerPage = 12;
   const [allCountries, setAllCountries] = useState([]);
   const [showingCountries, setShowingCountries] = useState(initialCountries);
-  const [showingPage, setshowingPage] = useState(0);
+  const [showingPage, setshowingPage] = useState(1);
 
   useEffect(() => {
     fetchAllCoutries();
   }, []);
-
 
   async function fetchAllCoutries() {
     setLoading(true);
@@ -74,7 +88,6 @@ const Home = () => {
     setShowingCountries(paginatedData);
     setAllCountries(data);
     setLoading(false);
-    console.log(data);
   }
 
   function onSearch(e) {
@@ -86,41 +99,39 @@ const Home = () => {
           newCountries.push(country);
         }
       }
-    }else {
+    } else {
       newCountries = allCountries;
     }
-    
+
     const paginatedData = paginateItems(newCountries);
-    console.log(paginatedData);
-    if(!newCountries.length){
+    if (!newCountries.length) {
       setShowingCountries(initialCountries);
-    }else {
+    } else {
       setShowingCountries(paginatedData);
     }
 
-/*     const filter = e.target.value.toUpperCase();
-    let newCountries = [];
-    if (filter) {
-      for (let country of countries) {
-        if (country.name.toUpperCase().indexOf(filter) > -1) {
-          newCountries.push(country);
-        }
-      }
-    } else {
-      newCountries = paginateItems(countries, itemsPerPage, page);
-    }
-    setcurrentShowing(newCountries); */
+    setshowingPage(1);
   }
 
+  function onFilter(region) {
+    const filtered = allCountries.filter(country => country.region === region);
+    const paginated = paginateItems(filtered);
+    setShowingCountries(paginated);
+    setshowingPage(1);
+  }
 
   function paginateItems(data) {
-    const pagesSize = Math.round(data.length / itemsPerPage);
+    let pagesSize = Math.round(data.length / itemsPerPage);
     const pages = [];
-    for (let c = 0; c < pagesSize; c++) {
-      const pageItems = data.slice(c * itemsPerPage, (c + 1) * itemsPerPage);
-      pages.push(pageItems);
+    if (data.length < itemsPerPage) {
+      pagesSize = 1;
+      pages.push([...data]);
+    } else {
+      for (let c = 0; c < pagesSize; c++) {
+        const pageItems = data.slice(c * itemsPerPage, (c + 1) * itemsPerPage);
+        pages.push(pageItems);
+      }
     }
-
     return { pages, pagesSize };
   }
 
@@ -131,21 +142,29 @@ const Home = () => {
           <Search callback={onSearch} />
         </SearchContainer>
         <SelectContainer>
-          <Select options={regions} />
+          <Select options={regions} callback={onFilter} />
         </SelectContainer>
       </FilterSection>
       <CountriesContainer>
         {(() => {
           if (showingCountries.pages.length) {
-            return showingCountries.pages[showingPage].map(country => (
+            return showingCountries.pages[showingPage - 1].map(country => (
               <CardContainer>
-                <CountryCard teste="1" countryData={country} />
+                <CountryCard countryData={country} />
               </CardContainer>
             ));
           }
         })()}
       </CountriesContainer>
-      <button onClick={() => setpage(page + 1)}>teste</button>
+      {showingCountries.pagesSize > 1 ? (
+        <PageNavigation
+          changePage={setshowingPage}
+          currentPage={showingPage}
+          pageCount={showingCountries.pagesSize}
+        />
+      ) : (
+        ""
+      )}
     </Container>
   );
 };
