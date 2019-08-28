@@ -16,7 +16,6 @@ const GlobalStyle = createGlobalStyle`
 
     body {
         box-sizing: border-box;
-        overflow:hidden;
 
         background-color:${props => props.theme.color.background};
     }

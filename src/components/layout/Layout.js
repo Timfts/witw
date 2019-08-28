@@ -13,7 +13,7 @@ const Layout = ({darkmodeState, darkmodeToggle}) => {
       <Switch>
         <Route exact path="/" component={Home} />
         <Route exact path="/country" render={() => <Redirect to="/" />} />
-        <Route path="/country/:name" component={CountryTemplate} />
+        <Route path="/country/:code" component={CountryTemplate} />
         <Route component={NotFoundPage} />
       </Switch>
     </>

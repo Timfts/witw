@@ -50,6 +50,11 @@ const typography = css`
   html {
     font-family: 'Nunito Sans', sans-serif;
     font-weight:300;
+    color:${props => props.theme.color.text};
+  }
+
+  h1 {
+    font-weight:800;
   }
 
 `;
