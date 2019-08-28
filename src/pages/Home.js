@@ -50,43 +50,78 @@ const CardContainer = styled.div`
 `;
 
 const Home = () => {
+  const initialCountries = {
+    pages: [],
+    pagesSize: 0
+  };
   const [Loading, setLoading] = useState(false);
-  const [countries, setCountries] = useState([]);
   const [page, setpage] = useState(1);
   const regions = ["africa", "americas", "asia", "europe", "oceania"];
-  const itemsPerPage = 20;
-  const [currentShowing, setcurrentShowing] = useState([]);
+  const itemsPerPage = 10;
+  const [allCountries, setAllCountries] = useState([]);
+  const [showingCountries, setShowingCountries] = useState(initialCountries);
+  const [showingPage, setshowingPage] = useState(0);
 
   useEffect(() => {
     fetchAllCoutries();
   }, []);
 
+
   async function fetchAllCoutries() {
     setLoading(true);
     const data = await getAllCountries();
-    setCountries(data);
-    setcurrentShowing(paginateItems(data, itemsPerPage, page));
+    const paginatedData = paginateItems(data);
+    setShowingCountries(paginatedData);
+    setAllCountries(data);
     setLoading(false);
+    console.log(data);
   }
 
   function onSearch(e) {
     const filter = e.target.value.toUpperCase();
     let newCountries = [];
-    for (let country of countries) {
-      if (country.name.toUpperCase().indexOf(filter) > -1) {
-        newCountries.push(country);
+    if (filter) {
+      for (let country of allCountries) {
+        if (country.name.toUpperCase().indexOf(filter) > -1) {
+          newCountries.push(country);
+        }
       }
+    }else {
+      newCountries = allCountries;
     }
-    setcurrentShowing(newCountries);
+    
+    const paginatedData = paginateItems(newCountries);
+    console.log(paginatedData);
+    if(!newCountries.length){
+      setShowingCountries(initialCountries);
+    }else {
+      setShowingCountries(paginatedData);
+    }
+
+/*     const filter = e.target.value.toUpperCase();
+    let newCountries = [];
+    if (filter) {
+      for (let country of countries) {
+        if (country.name.toUpperCase().indexOf(filter) > -1) {
+          newCountries.push(country);
+        }
+      }
+    } else {
+      newCountries = paginateItems(countries, itemsPerPage, page);
+    }
+    setcurrentShowing(newCountries); */
   }
 
-  function nextPage() {}
 
-  function paginateItems(items, itemsPerPage, currentPage) {
-    const data = [...items];
-    const pageIndex = currentPage - 1;
-    const pages = Math.round(items.length / itemsPerPage);
-    return data.slice(pageIndex * itemsPerPage, (pageIndex + 1) * itemsPerPage);
+  function paginateItems(data) {
+    const pagesSize = Math.round(data.length / itemsPerPage);
+    const pages = [];
+    for (let c = 0; c < pagesSize; c++) {
+      const pageItems = data.slice(c * itemsPerPage, (c + 1) * itemsPerPage);
+      pages.push(pageItems);
+    }
+
+    return { pages, pagesSize };
   }
 
   return (
@@ -100,15 +135,17 @@ const Home = () => {
         </SelectContainer>
       </FilterSection>
       <CountriesContainer>
-        {currentShowing.length
-          ? currentShowing.map(country => (
+        {(() => {
+          if (showingCountries.pages.length) {
+            return showingCountries.pages[showingPage].map(country => (
               <CardContainer>
                 <CountryCard teste="1" countryData={country} />
               </CardContainer>
-            ))
-          : ""}
+            ));
+          }
+        })()}
       </CountriesContainer>
-      <button onClick={() => console.log(currentShowing)}>teste</button>
+      <button onClick={() => setpage(page + 1)}>teste</button>
     </Container>
   );
 };
