@@ -2,9 +2,9 @@ import axios from "axios";
 
 const apiUrl = "https://restcountries.eu/rest/v2/";
 
-export async function getAllCountries() {
+async function get(path) {
   try {
-    const response = await axios.get(`${apiUrl}all`);
+    const response = await axios.get(path);
     const data = response.data;
     return data;
   } catch (err) {
@@ -12,22 +12,14 @@ export async function getAllCountries() {
   }
 }
 
-export async function getCountryByCode(code) {
-  try {
-    const response = await axios.get(`${apiUrl}alpha/${code}`);
-    const data = response.data;
-    return data;
-  } catch (err) {
-    console.log(err);
-  }
+export function getAllCountries() {
+  return get(`${apiUrl}all`);
 }
 
-export async function getCountryByRegion(region) {
-    try {
-      const response = await axios.get(`${apiUrl}region/${region}`);
-      const data = response.data;
-      return data;
-    } catch (err) {
-      console.log(err);
-    }
-  }
+export function getCountryByCode(code) {
+  return get(`${apiUrl}alpha/${code}`);
+}
+
+export function getCountryByRegion(region) {
+  return get(`${apiUrl}region/${region}`);
+}
