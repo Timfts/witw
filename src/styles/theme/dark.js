@@ -5,7 +5,8 @@ const darkTheme = {
         elements: color.darkBlue,
         background: color.veryDarkBlueOne,
         text:color.white,
-        input: color.darkBlue
+        input: color.darkBlue,
+        loading: color.vdbT
     }
 }
 

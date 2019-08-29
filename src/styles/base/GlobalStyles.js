@@ -1,5 +1,6 @@
 import { createGlobalStyle } from 'styled-components';
 import typography from './typography';
+import animations from '../abstract/animations';
 
 
 
@@ -19,6 +20,7 @@ const GlobalStyle = createGlobalStyle`
 
         background-color:${props => props.theme.color.background};
     }
+    ${animations}
     ${typography}
 `;
 

@@ -18,7 +18,6 @@ const BtnNav = styled.button`
 `;
 
 const PageNavigation = ({ currentPage, pageCount, changePage }) => {
-  console.log(currentPage, pageCount);
   function nextPage() {
     changePage(currentPage + 1);
   }

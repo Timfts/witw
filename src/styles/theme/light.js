@@ -5,7 +5,8 @@ const lightTheme = {
         elements: color.white,
         background: color.veryLightGrey,
         text:color.veryDarkBlueTwo,
-        input: color.darkGrey
+        input: color.darkGrey,
+        loading: color.vlgT
     }
 }
 

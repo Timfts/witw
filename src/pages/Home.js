@@ -7,6 +7,7 @@ import Select from "../components/Select";
 import CountryCard from "../components/CountryCard";
 import { media } from "../styles/abstract/respond";
 import PageNavigation from "../components/PageNavigator";
+import Loading from '../components/Loading';
 
 const FilterSection = styled.div`
   display: flex;
@@ -70,7 +71,7 @@ const Home = () => {
     pages: [],
     pagesSize: 1
   };
-  const [Loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
   const regions = ["Africa", "Americas", "Asia", "Europe", "Oceania"];
   const itemsPerPage = 12;
   const [allCountries, setAllCountries] = useState([]);
@@ -137,6 +138,9 @@ const Home = () => {
 
   return (
     <Container>
+      {loading ? (
+        <Loading />
+      ) : ''}
       <FilterSection>
         <SearchContainer>
           <Search callback={onSearch} />
@@ -148,8 +152,8 @@ const Home = () => {
       <CountriesContainer>
         {(() => {
           if (showingCountries.pages.length) {
-            return showingCountries.pages[showingPage - 1].map(country => (
-              <CardContainer>
+            return showingCountries.pages[showingPage - 1].map((country, i) => (
+              <CardContainer key={`card-${i}`}>
                 <CountryCard countryData={country} />
               </CardContainer>
             ));

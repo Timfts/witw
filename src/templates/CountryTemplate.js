@@ -5,6 +5,7 @@ import { getCountryByCode } from "../core/api";
 import { withRouter } from "react-router-dom";
 import { Button } from "../components/Button";
 import { media } from "../styles/abstract/respond";
+import Loading from '../components/Loading';
 
 const CountryContainer = styled(Container)`
   padding-bottom: 40px;
@@ -125,6 +126,7 @@ const CountryPage = withRouter(({ history, match }) => {
 
   return (
     <CountryContainer>
+      { loading ? (<Loading />) : '' }
       <BackButtonContainer>
         <BackButton onClick={() => history.push("/")}>Back</BackButton>
       </BackButtonContainer>
